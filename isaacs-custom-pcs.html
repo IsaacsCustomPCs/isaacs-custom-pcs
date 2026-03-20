@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isaac's Custom PCs</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --border2: #3a3a50;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --text: #f0f0f8;
+    --muted: #8888a0;
+    --danger: #ef4444;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-head); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 2.5rem; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: rgba(10,10,15,0.92);
+    backdrop-filter: blur(12px); z-index: 100;
+  }
+  .logo { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; }
+  .logo span { color: var(--accent); }
+  nav a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+  nav a:hover { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; }
+
+  /* HERO */
+  .hero {
+    padding: 6rem 2.5rem 5rem;
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .hero-tag {
+    display: inline-block; font-family: var(--font-mono); font-size: 0.7rem;
+    color: var(--accent); border: 1px solid var(--accent); padding: 0.3rem 0.7rem;
+    letter-spacing: 0.1em; margin-bottom: 1.5rem;
+  }
+  .hero h1 { font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.2rem; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero p { color: var(--muted); line-height: 1.7; font-size: 1rem; font-weight: 400; margin-bottom: 2rem; }
+  .btn {
+    display: inline-block; padding: 0.85rem 2rem; font-family: var(--font-head);
+    font-weight: 700; font-size: 0.9rem; letter-spacing: 0.04em; text-decoration: none;
+    cursor: pointer; border: none; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { background: #fff; }
+  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border2); margin-left: 1rem; }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats { display: flex; gap: 2rem; }
+  .stat { }
+  .stat-num { font-size: 2rem; font-weight: 800; color: var(--accent); }
+  .stat-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .hero-visual {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 1.5rem; position: relative; overflow: hidden;
+  }
+  .hero-visual::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%);
+  }
+  .spec-line { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  .spec-line:last-child { border-bottom: none; }
+  .spec-cat { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .spec-val { color: var(--accent); font-weight: 600; font-size: 0.8rem; }
+  .spec-price { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+  .visual-total { margin-top: 1rem; padding: 1rem; background: var(--bg3); display: flex; justify-content: space-between; align-items: center; }
+  .visual-total-label { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; color: var(--muted); }
+  .visual-total-price { font-size: 1.5rem; font-weight: 800; color: var(--accent3); }
+
+  /* SECTION */
+  section { padding: 5rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+  .section-tag { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .section-title { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1rem; }
+  .section-sub { color: var(--muted); line-height: 1.7; max-width: 520px; }
+
+  /* HOW IT WORKS */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .step { background: var(--card); border: 1px solid var(--border); padding: 2rem; position: relative; }
+  .step-num { font-family: var(--font-mono); font-size: 3rem; font-weight: 700; color: var(--border2); line-height: 1; margin-bottom: 1rem; }
+  .step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .step p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; font-weight: 400; }
+
+  /* CONFIGURATOR */
+  .config-wrap { margin-top: 3rem; background: var(--card); border: 1px solid var(--border); }
+  .config-header { padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .config-header h3 { font-size: 0.9rem; font-weight: 700; letter-spacing: 0.03em; }
+  .price-badge { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent3); }
+  .config-body { padding: 1.75rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .part-row { display: flex; flex-direction: column; gap: 0.35rem; }
+  .part-label { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .part-select {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    padding: 0.6rem 0.8rem; font-family: var(--font-head); font-size: 0.82rem;
+    font-weight: 600; appearance: none; cursor: pointer; outline: none; width: 100%;
+    transition: border-color 0.2s;
+  }
+  .part-select:focus { border-color: var(--accent); }
+  .part-price { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent3); }
+  .config-footer { padding: 1.25rem 1.75rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .total-section { }
+  .total-label { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; color: var(--muted); letter-spacing: 0.08em; }
+  .total-price { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
+  .total-price.ok { color: var(--accent3); }
+  .total-price.warn { color: #f59e0b; }
+  .total-price.over { color: var(--danger); }
+  .budget-note { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); margin-top: 0.25rem; }
+  .build-fee { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+  .proceed-btn { background: var(--accent); color: #000; font-family: var(--font-head); font-weight: 800; font-size: 0.9rem; padding: 0.9rem 2.2rem; border: none; cursor: pointer; letter-spacing: 0.03em; transition: all 0.2s; }
+  .proceed-btn:hover { background: #fff; }
+  .proceed-btn:disabled { background: var(--border2); color: var(--muted); cursor: not-allowed; }
+
+  /* ORDER FORM */
+  #order { border-top: 1px solid var(--border); }
+  .form-wrap { background: var(--card); border: 1px solid var(--border); margin-top: 3rem; padding: 2.5rem; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-label { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .form-input, .form-textarea {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    padding: 0.7rem 1rem; font-family: var(--font-head); font-size: 0.88rem; outline: none; width: 100%;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+  .form-textarea { resize: vertical; min-height: 100px; }
+  .form-divider { grid-column: 1 / -1; height: 1px; background: var(--border); margin: 0.5rem 0; }
+  .form-section-title { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-top: 0.5rem; }
+  .order-summary { grid-column: 1 / -1; background: var(--bg3); border: 1px solid var(--border); padding: 1.25rem; }
+  .order-summary-title { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.75rem; }
+  .order-summary-line { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 0.3rem 0; color: var(--muted); }
+  .order-summary-line span:last-child { color: var(--text); font-weight: 600; font-family: var(--font-mono); }
+  .order-total-line { display: flex; justify-content: space-between; padding: 0.75rem 0 0; border-top: 1px solid var(--border); margin-top: 0.5rem; font-weight: 700; font-size: 0.95rem; }
+  .order-total-line span:last-child { color: var(--accent3); font-family: var(--font-mono); }
+  .submit-row { grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 0.5rem; }
+  .submit-btn { background: var(--accent); color: #000; font-family: var(--font-head); font-weight: 800; font-size: 1rem; padding: 1rem 2.5rem; border: none; cursor: pointer; letter-spacing: 0.03em; transition: all 0.2s; }
+  .submit-btn:hover { background: #fff; }
+
+  /* SUCCESS */
+  .success-box { display: none; background: var(--card); border: 1px solid var(--accent3); padding: 3rem; text-align: center; margin-top: 3rem; }
+  .success-box.show { display: block; }
+  .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .success-box h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.75rem; }
+  .success-box p { color: var(--muted); line-height: 1.7; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; }
+  footer p { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
+  .footer-accent { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.5rem; }
+    .steps { grid-template-columns: 1fr; }
+    .config-body { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: 1; }
+    .form-section-title, .form-divider, .order-summary, .submit-row { grid-column: 1; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1rem; }
+    section { padding: 3rem 1.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Isaac's <span>Custom</span> PCs</div>
+  <div class="nav-links">
+    <a href="#how">How it Works</a>
+    <a href="#build">Build</a>
+    <a href="#order">Order</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div style="max-width:1100px;margin:0 auto;">
+  <div class="hero">
+    <div>
+      <div class="hero-tag">Frankston, VIC — Local PC Builder</div>
+      <h1>Your dream rig, <em>built right.</em></h1>
+      <p>You pick the parts, I build the machine. Professional builds, fair prices, and a local Frankston service you can trust.</p>
+      <div>
+        <a href="#build" class="btn btn-primary">Configure Your Build</a>
+        <a href="#how" class="btn btn-ghost">How it Works</a>
+      </div>
+      <div class="hero-stats" style="margin-top:2.5rem;">
+        <div class="stat"><div class="stat-num">$50</div><div class="stat-label">Flat build fee</div></div>
+        <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Tested builds</div></div>
+        <div class="stat"><div class="stat-num">Local</div><div class="stat-label">Frankston pickup</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;">Example Build — $1,500</div>
+      <div class="spec-line"><div><div class="spec-cat">CPU</div><div style="font-size:0.85rem;font-weight:600;margin-top:0.2rem;">Ryzen 5 7600X</div></div><div class="spec-price">$329</div></div>
+      <div class="spec-line"><div><div class="spec-cat">GPU</div><div style="font-size:0.85rem;font-weight:600;margin-top:0.2rem;">RX 7700 XT</div></div><div class="spec-price">$499</div></div>
+      <div class="spec-line"><div><div class="spec-cat">RAM</div><div style="font-size:0.85rem;font-weight:600;margin-top:0.2rem;">32GB DDR5 6000MHz</div></div><div class="spec-price">$129</div></div>
+      <div class="spec-line"><div><div class="spec-cat">Storage</div><div style="font-size:0.85rem;font-weight:600;margin-top:0.2rem;">1TB NVMe SSD</div></div><div class="spec-price">$109</div></div>
+      <div class="spec-line"><div><div class="spec-cat">Motherboard</div><div style="font-size:0.85rem;font-weight:600;margin-top:0.2rem;">B650M-A Pro</div></div><div class="spec-price">$189</div></div>
+      <div class="spec-line"><div><div class="spec-cat">PSU + Case + Cooler</div><div style="font-size:0.85rem;font-weight:600;margin-top:0.2rem;">Bundle</div></div><div class="spec-price">$195</div></div>
+      <div class="visual-total">
+        <div><div class="visual-total-label">Parts Total</div><div style="font-size:0.75rem;color:var(--muted);margin-top:0.2rem;">+ $50 build fee</div></div>
+        <div class="visual-total-price">$1,500</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-tag">Process</div>
+  <div class="section-title">Simple as 1, 2, 3</div>
+  <p class="section-sub">No complicated forms, no hidden fees. Just a straightforward local build service.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Configure Your Build</h3>
+      <p>Use the configurator below to pick your parts and see the total price in real time. The $50 build fee is included.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Submit &amp; Pay</h3>
+      <p>Fill in your details and send payment via bank transfer. Parts are ordered once payment is confirmed.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Pickup Your Rig</h3>
+      <p>I'll notify you when your build is ready. Collect from Frankston — fully tested and cable managed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONFIGURATOR -->
+<section id="build" style="border-top:1px solid var(--border);padding-top:5rem;">
+  <div class="section-tag">Build Configurator</div>
+  <div class="section-title">Pick Your Parts</div>
+  <p class="section-sub">Choose your components below. Prices are approximate and sourced from Scorptec, Centre Com &amp; MSY.</p>
+
+  <div class="config-wrap">
+    <div class="config-header">
+      <h3>Component Selection</h3>
+      <div class="price-badge" id="header-price">Total: $50.00</div>
+    </div>
+    <div class="config-body" id="config-body">
+      <!-- JS populates -->
+    </div>
+    <div class="config-footer">
+      <div class="total-section">
+        <div class="total-label">Your Total (incl. $50 build fee)</div>
+        <div class="total-price ok" id="total-display">$50.00</div>
+        <div class="budget-note" id="budget-note">No parts selected yet</div>
+        <div class="build-fee">Parts cost + $50 build fee = your total</div>
+      </div>
+      <button class="proceed-btn" id="proceed-btn" onclick="scrollToOrder()">Proceed to Order →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section id="order">
+  <div class="section-tag">Order</div>
+  <div class="section-title">Submit Your Request</div>
+  <p class="section-sub">Fill in your details and I'll be in touch within 24 hours to confirm your build and payment.</p>
+
+  <div class="form-wrap" id="form-wrap">
+    <div class="form-grid">
+      <div class="form-section-title">Your Details</div>
+      <div class="form-group">
+        <label class="form-label">First Name *</label>
+        <input class="form-input" type="text" id="fname" placeholder="John">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name *</label>
+        <input class="form-input" type="text" id="lname" placeholder="Smith">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input class="form-input" type="email" id="email" placeholder="john@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input class="form-input" type="tel" id="phone" placeholder="04XX XXX XXX">
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Suburb (for pickup confirmation)</label>
+        <input class="form-input" type="text" id="suburb" placeholder="Frankston, Mornington, etc.">
+      </div>
+
+      <div class="form-divider"></div>
+      <div class="form-section-title">Build Details</div>
+      <div class="order-summary" id="order-summary">
+        <div class="order-summary-title">Your Selected Parts</div>
+        <div id="summary-lines">
+          <div style="color:var(--muted);font-size:0.82rem;">No parts selected — use the configurator above.</div>
+        </div>
+        <div class="order-total-line">
+          <span>Total (incl. $50 build fee)</span>
+          <span id="summary-total">$50.00</span>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Any Special Requests or Notes</label>
+        <textarea class="form-textarea" id="notes" placeholder="e.g. Prefer quiet cooling, specific case colour, cable management style..."></textarea>
+      </div>
+
+      <div class="form-divider"></div>
+      <div class="form-section-title">Payment</div>
+      <div class="form-group full">
+        <label class="form-label">Preferred Payment Method</label>
+        <select class="form-input" id="payment" style="cursor:pointer;">
+          <option>Bank Transfer (BSB/Account)</option>
+          <option>PayPal</option>
+          <option>Cash on Pickup (after parts arrive)</option>
+        </select>
+      </div>
+      <div class="submit-row">
+        <button class="submit-btn" onclick="submitOrder()">Send Build Request →</button>
+      </div>
+    </div>
+  </div>
+  <div class="success-box" id="success-box">
+    <div class="success-icon">✓</div>
+    <h3>Build Request Sent!</h3>
+    <p>Thanks for your order. Isaac will be in touch within 24 hours at the email address you provided to confirm your parts list and payment details.</p>
+    <p style="margin-top:0.75rem;">In the meantime, don't hesitate to reach out directly.</p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 <span class="footer-accent">Isaac's Custom PCs</span> — Frankston, VIC</p>
+  <p>Builds tested. Parts warranted. Pickup only.</p>
+</footer>
+
+<script>
+const PARTS = {
+  cpu: {
+    label: "CPU",
+    options: [
+      { name: "— Select CPU —", price: 0 },
+      { name: "Intel Core i3-13100F", price: 149 },
+      { name: "AMD Ryzen 5 5600X", price: 199 },
+      { name: "Intel Core i5-13600K", price: 299 },
+      { name: "AMD Ryzen 5 7600X", price: 329 },
+      { name: "Intel Core i7-13700K", price: 449 },
+      { name: "AMD Ryzen 7 7700X", price: 479 },
+      { name: "Intel Core i9-13900K", price: 699 },
+      { name: "AMD Ryzen 9 7900X", price: 599 },
+    ]
+  },
+  gpu: {
+    label: "GPU",
+    options: [
+      { name: "— Select GPU —", price: 0 },
+      { name: "AMD RX 6600", price: 269 },
+      { name: "NVIDIA RTX 3060", price: 299 },
+      { name: "AMD RX 6700 XT", price: 349 },
+      { name: "NVIDIA RTX 4060", price: 399 },
+      { name: "AMD RX 7600", price: 379 },
+      { name: "NVIDIA RTX 4060 Ti", price: 549 },
+      { name: "AMD RX 7700 XT", price: 499 },
+      { name: "NVIDIA RTX 4070", price: 699 },
+      { name: "AMD RX 7800 XT", price: 599 },
+      { name: "NVIDIA RTX 4070 Ti", price: 899 },
+      { name: "AMD RX 7900 XT", price: 799 },
+      { name: "NVIDIA RTX 4080", price: 1199 },
+    ]
+  },
+  ram: {
+    label: "RAM",
+    options: [
+      { name: "— Select RAM —", price: 0 },
+      { name: "16GB DDR4 3200MHz", price: 59 },
+      { name: "32GB DDR4 3200MHz", price: 99 },
+      { name: "16GB DDR5 5600MHz", price: 89 },
+      { name: "32GB DDR5 6000MHz", price: 129 },
+      { name: "64GB DDR5 6000MHz", price: 229 },
+    ]
+  },
+  storage: {
+    label: "Storage",
+    options: [
+      { name: "— Select Storage —", price: 0 },
+      { name: "500GB NVMe SSD", price: 69 },
+      { name: "1TB NVMe SSD", price: 109 },
+      { name: "2TB NVMe SSD", price: 189 },
+      { name: "1TB NVMe + 2TB HDD", price: 169 },
+      { name: "2TB NVMe + 4TB HDD", price: 289 },
+    ]
+  },
+  mobo: {
+    label: "Motherboard",
+    options: [
+      { name: "— Select Motherboard —", price: 0 },
+      { name: "B760M (Intel LGA1700)", price: 149 },
+      { name: "Z790 (Intel LGA1700)", price: 249 },
+      { name: "B650M (AMD AM5)", price: 189 },
+      { name: "X670E (AMD AM5)", price: 349 },
+      { name: "B550M (AMD AM4)", price: 119 },
+      { name: "X570 (AMD AM4)", price: 199 },
+    ]
+  },
+  psu: {
+    label: "Power Supply",
+    options: [
+      { name: "— Select PSU —", price: 0 },
+      { name: "550W 80+ Bronze", price: 79 },
+      { name: "650W 80+ Gold", price: 109 },
+      { name: "750W 80+ Gold", price: 129 },
+      { name: "850W 80+ Gold", price: 159 },
+      { name: "1000W 80+ Platinum", price: 219 },
+    ]
+  },
+  pccase: {
+    label: "Case",
+    options: [
+      { name: "— Select Case —", price: 0 },
+      { name: "Budget Mid Tower (Black)", price: 69 },
+      { name: "Mid Tower with Glass Panel", price: 99 },
+      { name: "Mid Tower RGB (White)", price: 119 },
+      { name: "Full Tower (Black)", price: 149 },
+      { name: "Compact Mini-ITX", price: 109 },
+    ]
+  },
+  cooler: {
+    label: "CPU Cooler",
+    options: [
+      { name: "— Select Cooler —", price: 0 },
+      { name: "Stock Cooler (if included)", price: 0 },
+      { name: "Budget Air Cooler", price: 39 },
+      { name: "Mid Air Cooler (Thermalright)", price: 59 },
+      { name: "240mm AIO Liquid Cooler", price: 99 },
+      { name: "280mm AIO Liquid Cooler", price: 129 },
+      { name: "360mm AIO Liquid Cooler", price: 159 },
+    ]
+  },
+};
+
+const BUILD_FEE = 50;
+let selectedPrices = {};
+let selectedNames = {};
+
+function buildConfigurator() {
+  const body = document.getElementById('config-body');
+  body.innerHTML = '';
+  for (const [key, part] of Object.entries(PARTS)) {
+    const row = document.createElement('div');
+    row.className = 'part-row';
+    const label = document.createElement('div');
+    label.className = 'part-label';
+    label.textContent = part.label;
+    const sel = document.createElement('select');
+    sel.className = 'part-select';
+    sel.id = 'sel-' + key;
+    part.options.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt.price;
+      o.textContent = opt.name + (opt.price > 0 ? '' : '');
+      o.dataset.name = opt.name;
+      o.dataset.price = opt.price;
+      sel.appendChild(o);
+    });
+    sel.addEventListener('change', () => updatePrices());
+    const priceEl = document.createElement('div');
+    priceEl.className = 'part-price';
+    priceEl.id = 'price-' + key;
+    priceEl.textContent = '';
+    row.appendChild(label);
+    row.appendChild(sel);
+    row.appendChild(priceEl);
+    body.appendChild(row);
+  }
+}
+
+function updatePrices() {
+  let partsTotal = 0;
+  selectedPrices = {};
+  selectedNames = {};
+  for (const key of Object.keys(PARTS)) {
+    const sel = document.getElementById('sel-' + key);
+    const price = parseFloat(sel.value) || 0;
+    const selOpt = sel.options[sel.selectedIndex];
+    const name = selOpt.dataset.name;
+    const priceEl = document.getElementById('price-' + key);
+    if (price > 0) {
+      partsTotal += price;
+      selectedPrices[key] = price;
+      selectedNames[key] = name;
+      priceEl.textContent = '$' + price.toFixed(0);
+    } else {
+      priceEl.textContent = '';
+    }
+  }
+  const grandTotal = partsTotal + BUILD_FEE;
+  const totalEl = document.getElementById('total-display');
+  const headerEl = document.getElementById('header-price');
+  const noteEl = document.getElementById('budget-note');
+  totalEl.textContent = '$' + grandTotal.toFixed(0);
+  headerEl.textContent = 'Total: $' + grandTotal.toFixed(0);
+  if (partsTotal === 0) {
+    totalEl.className = 'total-price ok';
+    noteEl.textContent = 'No parts selected yet';
+  } else if (partsTotal < 1200) {
+    totalEl.className = 'total-price ok';
+    noteEl.textContent = 'Parts: $' + partsTotal + ' + $50 build fee';
+  } else if (partsTotal < 2000) {
+    totalEl.className = 'total-price warn';
+    noteEl.textContent = 'Parts: $' + partsTotal + ' + $50 build fee';
+  } else {
+    totalEl.className = 'total-price over';
+    noteEl.textContent = 'Parts: $' + partsTotal + ' + $50 build fee (high-end build!)';
+  }
+  updateOrderSummary(partsTotal, grandTotal);
+}
+
+function updateOrderSummary(partsTotal, grandTotal) {
+  const linesEl = document.getElementById('summary-lines');
+  const totalEl = document.getElementById('summary-total');
+  if (Object.keys(selectedNames).length === 0) {
+    linesEl.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;">No parts selected — use the configurator above.</div>';
+  } else {
+    linesEl.innerHTML = Object.entries(selectedNames).map(([key, name]) => {
+      const label = PARTS[key].label;
+      const price = selectedPrices[key];
+      return `<div class="order-summary-line"><span>${label}: ${name}</span><span>$${price}</span></div>`;
+    }).join('');
+    linesEl.innerHTML += `<div class="order-summary-line"><span>Build fee</span><span>$50</span></div>`;
+  }
+  totalEl.textContent = '$' + grandTotal.toFixed(0);
+}
+
+function scrollToOrder() {
+  document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+}
+
+function submitOrder() {
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  if (!fname || !lname || !email) {
+    alert('Please fill in your first name, last name, and email address.');
+    return;
+  }
+  if (!email.includes('@')) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+  document.getElementById('form-wrap').style.display = 'none';
+  document.getElementById('success-box').classList.add('show');
+  document.getElementById('success-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+buildConfigurator();
+updatePrices();
+</script>
+</body>
+</html>
